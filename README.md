@@ -4,6 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
+The Register and Login authentication using api url from Reqres
+https://reqres.in/. 
+
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
