@@ -1,22 +1,63 @@
+import 'dart:convert';
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_application/Sign-Up.dart';
+import 'package:user_application/User.dart';
+import 'package:user_application/api.dart';
 import 'package:user_application/utils/Emoticons.dart';
+import 'package:http/http.dart' as http;
+
 
 
 
 class userProfile extends StatefulWidget {
-  final String email;
+  final String token;
 
-   const userProfile(this.email,{Key? key}) : super(key: key);
+   const userProfile(this.token,{Key? key}) : super(key: key);
 
 
   @override
   State<userProfile> createState() => _userProfileState();
 }
 
+
 class _userProfileState extends State<userProfile>  {
 
+
+
+
+Future fetchApi() async {
+  var url = 'https://reqres.in/api/users/4';
+  String email;
+  http.Response res ;
+  try {
+  res = await http.get(Uri.parse(url));
+  if(res.statusCode==200){
+
+    setState(() {
+      //stringResponse = res.body;
+      Map mapResponse= json.decode(res.body);
+      Map dataResponse = mapResponse['data'];
+      email = dataResponse['email'].toString();
+      print(email);
+    });
+
+  }
+
+  } catch (e) {
+    print(e);
+  }
+}
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchApi();
+
+  }
 
 
   @override
@@ -30,22 +71,24 @@ class _userProfileState extends State<userProfile>  {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:  [
                 // Hi user
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Hi,Eve",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Hi Eve!",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8,
-                    ),
-                    Text(widget.email,
-                      style: TextStyle(color: Colors.blue[100]),
-                    ),
-                  ],
+                      SizedBox(height: 8,
+                      ),
+                      Text('6 Jan 2022',
+                        style: TextStyle(color: Colors.blue[100]),
+                      ),
+                    ],
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -177,4 +220,9 @@ class _userProfileState extends State<userProfile>  {
     );
 
   }
+}
+
+class User{
+  final String name,email,userName;
+  User(this.name,this.email,this.userName);
 }

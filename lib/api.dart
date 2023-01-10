@@ -1,17 +1,20 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-class CallApi{
+import 'package:user_application/User.dart';
+class ApiService {
+  Future<UserModel> fetchApi(id) async {
+    var url = 'https://reqres.in/api/users/$id';
 
-    PostApi(body) async{
-      var url = 'https://api.json-generator.com/templates/Y0-BtdWFvhsx/data';
-      final res = await http.post(Uri.parse(url));
-      if (res.statusCode== 200){
-        var model_ = json.decode(res.body);
+    var response = await http.get(Uri.parse(url));
 
-      }
+    if(response.statusCode == 200){
+      var dataResponse = jsonDecode(response.body)['data'];
+
+      UserModel user = UserModel.fromJson(dataResponse);
+
+      return user;
+    } else {
+      throw Exception('Failed Get API');
     }
-
-
+  }
 }

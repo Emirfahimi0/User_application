@@ -43,8 +43,12 @@ class _SignInState extends State<SignIn> {
 
         print("Login Successful");
         await prefs.setString('email', email);
+        var data = jsonDecode(res.body.toString());
+        String token = data['token'].toString();
+        print(data['token']);
+        print (data['id']);
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>userProfile(email)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>userProfile(token)));
         setState(() {
 
           isLoading=true;
